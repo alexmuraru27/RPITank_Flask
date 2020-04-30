@@ -4,7 +4,7 @@ from threading import Thread
 import RPi.GPIO as GPIO
 import time
 
-#11 trig senzor distanta
+#18 trig senzor distanta
 trig=18
 #22 Echo senzor
 echo=22
@@ -25,33 +25,48 @@ ms1=36
 #38 Motor Stanga2
 ms2=38
 
-GPIO.setmode(GPIO.BOARD) 
-GPIO.setup(trig, GPIO.OUT)
-GPIO.setup(echo,GPIO.IN)
-GPIO.setup(led,GPIO.OUT)
 
-GPIO.setup(en1,GPIO.OUT)
-GPIO.setup(md1,GPIO.OUT)
-GPIO.setup(md2,GPIO.OUT)
-
-GPIO.setup(en2,GPIO.OUT)
-GPIO.setup(ms1,GPIO.OUT)
-GPIO.setup(ms2,GPIO.OUT)
 
 class Car:
-	def __init__(self): 
+	def __init__(self):
+		self.trig=18
+		self.echo=22
+		self.led=24
+		self.en1=33
+		self.md1=35
+		self.md2=37
+		self.en2=32
+		self.ms1=36
+		self.ms2=38
+		GPIO.setmode(GPIO.BOARD) 
+		GPIO.setup(self.trig, GPIO.OUT)
+		GPIO.setup(self.echo,GPIO.IN)
+		GPIO.setup(self.led,GPIO.OUT)
+		GPIO.setup(self.en1,GPIO.OUT)
+		GPIO.setup(self.md1,GPIO.OUT)
+		GPIO.setup(self.md2,GPIO.OUT)
+		GPIO.setup(self.en2,GPIO.OUT)
+		GPIO.setup(self.ms1,GPIO.OUT)
+		GPIO.setup(self.ms2,GPIO.OUT)
 		self.currentDistance="0"
+		self.blinkDelay=0.2
+		self.blink=False
+		self.ledState=0
+
 		self.th=Thread(target=self.distanceLoop)
 		self.th.start()
+		self.ledTh=Thread(target=self.LEDloop)
+		self.ledTh.start()
+		
 
 	def setDistance(self):
 		tmp=self.currentDistance
-		GPIO.output(trig,GPIO.HIGH)
+		GPIO.output(self.trig,GPIO.HIGH)
 		time.sleep(0.00001)
-		GPIO.output(trig,GPIO.LOW)
-		while GPIO.input(echo)==0:
+		GPIO.output(self.trig,GPIO.LOW)
+		while GPIO.input(self.echo)==0:
 			start_t=time.time()
-		while GPIO.input(echo)==1:
+		while GPIO.input(self.echo)==1:
 			stop_t=time.time()
 		durata=stop_t-start_t
 		dist=durata*342/2*100
@@ -65,19 +80,46 @@ class Car:
 			self.setDistance()
 			time.sleep(0.2)
 
+
 	def getDistance(self):
 		return self.currentDistance
+
+	def LEDloop(self):
+		while 1:
+			if self.blink is True:
+				if(self.ledState == 0):
+					GPIO.output(self.led,GPIO.HIGH)
+					self.ledState=1
+				else:
+					GPIO.output(self.led,GPIO.LOW)
+					self.ledState=0
+			time.sleep(self.blinkDelay)
+
+	def startLED(self):
+		self.blink=False
+		GPIO.output(self.led,GPIO.HIGH)
+
+	def stopLED(self):
+		self.blink=False
+		GPIO.output(self.led,GPIO.LOW)
+
+	def startBlink(self):
+		self.blink=True
+
+	def stopBlink(self):
+		self.blink=False
+
 
 
 
 app=Flask(__name__)
 masina=Car()
+masina.startBlink()
 
 
 @app.route('/')
 def index():
 	return render_template('index.html')
-
 
 @app.route('/distanta')
 def sendDist():
