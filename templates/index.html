@@ -17,6 +17,27 @@
 				<br>
 				<img src="static/tank.jpg" width="200" height="200">
 			</div>
+			<form action="/led" method="POST">
+				{% if ledstate == "on" %}
+					<label>On</label><input type="radio" value="on" name="led" checked>
+				{% else %}
+					<label>On</label><input type="radio" value="on" name="led">
+				{% endif %}
+
+				{% if ledstate == "off" %}
+					<label>Off</label><input type="radio" value="off" name="led" checked>
+				{% else %}
+					<label>Off</label><input type="radio" value="off" name="led">
+				{% endif %}
+				
+				{% if ledstate == "flash" %}
+					<label>Flash</label><input type="radio" value="flash" name="led" checked>
+				{% else %}
+					<label>Flash</label><input type="radio" value="flash" name="led">
+				{% endif %}
+				
+				<input type="submit" value="Trimite">
+			</form>
 		</div>
 	</body>
 </html>

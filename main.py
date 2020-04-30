@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask import render_template
 from threading import Thread
 import RPi.GPIO as GPIO
@@ -57,6 +57,7 @@ class Car:
 		self.th.start()
 		self.ledTh=Thread(target=self.LEDloop)
 		self.ledTh.start()
+		self.stopLED()
 		
 
 	def setDistance(self):
@@ -96,11 +97,11 @@ class Car:
 			time.sleep(self.blinkDelay)
 
 	def startLED(self):
-		self.blink=False
+		self.stopBlink()
 		GPIO.output(self.led,GPIO.HIGH)
 
 	def stopLED(self):
-		self.blink=False
+		self.stopBlink()
 		GPIO.output(self.led,GPIO.LOW)
 
 	def startBlink(self):
@@ -114,7 +115,7 @@ class Car:
 
 app=Flask(__name__)
 masina=Car()
-masina.startBlink()
+
 
 
 @app.route('/')
@@ -124,6 +125,23 @@ def index():
 @app.route('/distanta')
 def sendDist():
 	return masina.getDistance()
+
+@app.route('/led', methods=['POST'])
+def functieLed():
+	default_name = '0'
+	data = request.form.get('led', default_name)
+	if data=='on':
+		masina.startLED()
+		return render_template('index.html',ledstate="on")
+	elif data=='off':
+		masina.stopLED()
+		return render_template('index.html',ledstate="off")
+	elif data=='flash':
+		masina.startBlink()
+		return render_template('index.html',ledstate="flash")
+	return render_template('index.html',ledstate="no")
+	
+
 
 
 if __name__ == '__main__':
