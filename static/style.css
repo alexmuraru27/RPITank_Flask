@@ -1,0 +1,44 @@
+.container {
+  height: 500px;
+  position: relative;
+}
+
+.center {
+  font-size: 40px;
+  text-align: center;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+#slider{
+	transform: rotate(-90deg);
+}
+input[type="range"] { 
+    -webkit-appearance: none;
+    position: relative;
+    overflow: hidden;
+    height: 50px;
+    width: 200px;
+    cursor: pointer;
+	border: 1px solid red;
+    border-radius: 0; /* iOS */
+}
+
+::-webkit-slider-runnable-track {
+    background: #ddd;
+}
+
+/*
+ * 1. Set to 0 width and remove border for a slider without a thumb
+ */
+::-webkit-slider-thumb {
+    -webkit-appearance: none;
+	width: 0px;
+    background: white;
+	display:hidden;
+    box-shadow: -100vw 0 0 100vw red;
+}
