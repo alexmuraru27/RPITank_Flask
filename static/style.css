@@ -42,3 +42,29 @@ input[type="range"] {
 	display:hidden;
     box-shadow: -100vw 0 0 100vw red;
 }
+
+  #mainJoystick {
+    align-items: center;
+    display: block;
+    height: 100px;
+    justify-content: center;
+    margin: auto;
+    width: 100px;
+  }
+  
+  #wrapper {
+    border: 1px solid black;
+    width: 150px;
+    height: 150px;
+  }
+  
+  .joystick {
+    background-image: url("tank.jpg") ;
+    background-repeat: no-repeat;
+    background-size: 150px 150px;
+    cursor: pointer;
+    height: 150px;
+    user-select: none;
+    width: 150px;
+  }
+  

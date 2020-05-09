@@ -4,25 +4,25 @@ from threading import Thread
 import RPi.GPIO as GPIO
 import time
 
-#18 trig senzor distanta
+#18 trig distance sensor
 trig=18
-#22 Echo senzor
+#22 Echo sensor
 echo=22
-#24 leduri
+#24 leds
 led=24
 
 #33 EN A
 en1=33
-#35 MotorDreapta1
+#35 MotorRight1
 md1=35
-#37 MotorDreapta2
+#37 MotorRight2
 md2=37
 
 #32 EN B
 en2=32
-#36 Motor Stanga1
+#36 Motor Left1
 ms1=36
-#38 Motor Stanga2
+#38 Motor Left2
 ms2=38
 
 
