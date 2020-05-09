@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask import render_template
 from threading import Thread
+import json
 import RPi.GPIO as GPIO
 import time
 
@@ -58,7 +59,15 @@ class Car:
 		self.ledTh=Thread(target=self.LEDloop)
 		self.ledTh.start()
 		self.stopLED()
-		
+		self.leftRunning=False
+		self.rightRunning=False
+		self.leftPWM=GPIO.PWM(self.en2, 500)
+		self.leftPWM.start(0)
+		self.rightPWM=GPIO.PWM(self.en1, 500)
+		self.rightPWM.start(0)
+		self.leftPWMVal=0
+		self.rightPWMVal=0
+		self.pwmrate=10
 
 	def setDistance(self):
 		tmp=self.currentDistance
@@ -74,7 +83,6 @@ class Car:
 		if(dist>400):
 			dist=400
 		self.currentDistance=str((float(dist)+float(tmp))/2)
-		print("Noua distanta= "+self.currentDistance)
 
 	def distanceLoop(self):
 		while 1:
@@ -110,6 +118,79 @@ class Car:
 	def stopBlink(self):
 		self.blink=False
 
+	def moveTankCoords(self,x,y):
+		w=(1-abs(y))*(x)+x
+		v=(1-abs(x))*(y)+y
+		l=(v+w)/2*100
+		r=(v-w)/2*100
+		print("r= "+str(r)+"\n l= "+str(l))
+		
+
+		if l>0:
+			GPIO.output(self.ms1,GPIO.LOW)
+			GPIO.output(self.ms2,GPIO.HIGH)
+			self.leftRunning=True
+		elif l<0:
+			GPIO.output(self.ms1,GPIO.HIGH)
+			GPIO.output(self.ms2,GPIO.LOW)
+			self.leftRunning=True
+		else:
+			GPIO.output(self.ms1,GPIO.LOW)
+			GPIO.output(self.ms2,GPIO.LOW)
+			self.leftRunning=False
+
+		if r>0:
+			GPIO.output(self.md1,GPIO.LOW)
+			GPIO.output(self.md2,GPIO.HIGH)
+			self.rightRunning=True
+		elif r<0:
+			GPIO.output(self.md1,GPIO.HIGH)
+			GPIO.output(self.md2,GPIO.LOW)
+			self.rightRunning=True
+		else:
+			GPIO.output(self.md1,GPIO.LOW)
+			GPIO.output(self.md2,GPIO.LOW)
+			self.rightRunning=False
+
+		print(str(self.rightRunning ))
+		print(str(self.leftRunning ))
+
+		if self.rightRunning == True:
+			if self.leftPWMVal >=100:
+				self.leftPWMVal=100
+			else:
+				if abs(self.leftPWMVal)<abs(l):
+					self.leftPWMVal=self.leftPWMVal+self.pwmrate
+				if abs(self.leftPWMVal)>abs(l):
+					self.leftPWMVal=self.leftPWMVal-self.pwmrate
+			if self.leftPWMVal <0:
+				self.leftPWMVal=0
+			self.leftPWM.ChangeDutyCycle(self.leftPWMVal)
+		else:
+			self.leftPWM.ChangeDutyCycle(0)
+			self.leftPWMVal=0
+
+
+		if self.leftRunning == True:
+			if self.rightPWMVal >=100:
+				self.rightPWMVal=100
+			else:
+				if abs(self.rightPWMVal)<abs(r):
+					self.rightPWMVal=self.rightPWMVal+self.pwmrate
+				if abs(self.rightPWMVal)>abs(r):
+					self.rightPWMVal=self.rightPWMVal-self.pwmrate
+			if self.rightPWMVal <0:
+				self.rightPWMVal=0
+			self.rightPWM.ChangeDutyCycle(self.rightPWMVal)
+		else:
+			self.rightPWM.ChangeDutyCycle(0)
+			self.rightPWMVal=0
+
+
+
+
+		
+
 
 
 
@@ -127,7 +208,7 @@ def sendDist():
 	return masina.getDistance()
 
 @app.route('/led', methods=['POST'])
-def functieLed():
+def ledFunction():
 	default_name = '0'
 	data = request.form.get('led', default_name)
 	if data=='on':
@@ -141,7 +222,13 @@ def functieLed():
 		return render_template('index.html',ledstate="flash")
 	return render_template('index.html',ledstate="no")
 	
-
+@app.route('/move', methods=['POST'])
+def moveTank():
+	(x,y)=str(request.data)[2:-1].split(",")
+	y=-float(y)
+	x=float(x)
+	masina.moveTankCoords(x,y)
+	return "ok"
 
 
 if __name__ == '__main__':

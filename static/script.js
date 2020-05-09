@@ -1,8 +1,17 @@
+var joystick;
 function start()
 {
 	setInterval(readDistance, 200);
-	const joystick = createJoystick(document.getElementById('wrapper'));
-	setInterval(() => console.log(joystick.getPosition()), 200);
+	joystick = createJoystick(document.getElementById('wrapper'));
+	setInterval(() => sendPosition(),100);
+
+}
+
+function sendPosition(){
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", '/move', true);
+	xhr.send(joystick.getPosition().x+","+joystick.getPosition().y);
+
 }
 
 function readDistance(){ 
