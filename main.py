@@ -67,7 +67,7 @@ class Car:
 		self.rightPWM.start(0)
 		self.leftPWMVal=0
 		self.rightPWMVal=0
-		self.pwmrate=10
+		self.pwmrate=5
 
 	def setDistance(self):
 		tmp=self.currentDistance
@@ -156,13 +156,12 @@ class Car:
 		print(str(self.leftRunning ))
 
 		if self.rightRunning == True:
+			if abs(self.leftPWMVal)<abs(l):
+				self.leftPWMVal=self.leftPWMVal+self.pwmrate
+			if abs(self.leftPWMVal)>abs(l):
+				self.leftPWMVal=self.leftPWMVal-self.pwmrate
 			if self.leftPWMVal >=100:
 				self.leftPWMVal=100
-			else:
-				if abs(self.leftPWMVal)<abs(l):
-					self.leftPWMVal=self.leftPWMVal+self.pwmrate
-				if abs(self.leftPWMVal)>abs(l):
-					self.leftPWMVal=self.leftPWMVal-self.pwmrate
 			if self.leftPWMVal <0:
 				self.leftPWMVal=0
 			self.leftPWM.ChangeDutyCycle(self.leftPWMVal)
@@ -172,13 +171,12 @@ class Car:
 
 
 		if self.leftRunning == True:
+			if abs(self.rightPWMVal)<abs(r):
+				self.rightPWMVal=self.rightPWMVal+self.pwmrate
+			if abs(self.rightPWMVal)>abs(r):
+				self.rightPWMVal=self.rightPWMVal-self.pwmrate
 			if self.rightPWMVal >=100:
 				self.rightPWMVal=100
-			else:
-				if abs(self.rightPWMVal)<abs(r):
-					self.rightPWMVal=self.rightPWMVal+self.pwmrate
-				if abs(self.rightPWMVal)>abs(r):
-					self.rightPWMVal=self.rightPWMVal-self.pwmrate
 			if self.rightPWMVal <0:
 				self.rightPWMVal=0
 			self.rightPWM.ChangeDutyCycle(self.rightPWMVal)
