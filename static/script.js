@@ -2,7 +2,7 @@ function start()
 {
 	setInterval(readDistance, 200);
 	const joystick = createJoystick(document.getElementById('wrapper'));
-	setInterval(() => console.log(joystick.getPosition()), 16);
+	setInterval(() => console.log(joystick.getPosition()), 200);
 }
 
 function readDistance(){ 
@@ -68,8 +68,12 @@ function createJoystick(parent) {
 		const distance = Math.min(maxDiff, Math.hypot(xDiff, yDiff));
 		const xNew = distance * Math.cos(angle);
 		const yNew = distance * Math.sin(angle);
-    stick.style.transform = `translate3d(${xNew}px, ${yNew}px, 0px)`;
-    currentPos = { x: xNew, y: yNew };
+	
+	stick.style.transform = `translate3d(${xNew}px, ${yNew}px, 0px)`;
+	var angle1=angle+Math.PI/2;
+	stick.style.transform+= 'rotate('+angle1+'rad)';
+	
+    currentPos = { x: xNew/100, y: yNew/100 };
   }
 
   function handleMouseUp(event) {

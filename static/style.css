@@ -54,6 +54,7 @@ input[type="range"] {
   
   #wrapper {
     border: 1px solid black;
+    border-radius: 100%;
     width: 150px;
     height: 150px;
   }
