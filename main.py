@@ -61,13 +61,13 @@ class Car:
 		self.stopLED()
 		self.leftRunning=False
 		self.rightRunning=False
-		self.leftPWM=GPIO.PWM(self.en2, 500)
+		self.leftPWM=GPIO.PWM(self.en2, 1000)
 		self.leftPWM.start(0)
-		self.rightPWM=GPIO.PWM(self.en1, 500)
+		self.rightPWM=GPIO.PWM(self.en1, 1000)
 		self.rightPWM.start(0)
 		self.leftPWMVal=0
 		self.rightPWMVal=0
-		self.pwmrate=5
+		self.pwmrate=10
 
 	def setDistance(self):
 		tmp=self.currentDistance
