@@ -124,8 +124,6 @@ class Car:
 		v=(1-abs(x))*(y)+y
 		l=(v+w)/2*100
 		r=(v-w)/2*100
-		print("r= "+str(r)+"\n l= "+str(l))
-		
 
 		if l>0:
 			GPIO.output(self.ms1,GPIO.LOW)
@@ -152,9 +150,6 @@ class Car:
 			GPIO.output(self.md1,GPIO.LOW)
 			GPIO.output(self.md2,GPIO.LOW)
 			self.rightRunning=False
-
-		print(str(self.rightRunning ))
-		print(str(self.leftRunning ))
 
 		if self.rightRunning == True:
 			if abs(self.leftPWMVal)<abs(l):
@@ -194,6 +189,13 @@ class Car:
 
 
 app=Flask(__name__)
+if app.config["DEBUG"]:
+    @app.after_request
+    def after_request(response):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
+        response.headers["Expires"] = 0
+        response.headers["Pragma"] = "no-cache"
+        return response
 masina=Car()
 
 

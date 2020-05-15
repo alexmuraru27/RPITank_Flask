@@ -8,43 +8,47 @@
 	<body onload="start()">
 	<br>
 		<div class="container">
+
 			<div class="center">
-				<p id="distanta"><20cm</p>
+				<div id="videoFeed">
+					<img src="{{ url_for('video_feed') }}" width="500" height="500" alt="camera">
+				</div>
+
+				<form action="/led" method="POST">
+					{% if ledstate == "on" %}
+						<label>On</label><input type="radio" value="on" name="led" checked>
+					{% else %}
+						<label>On</label><input type="radio" value="on" name="led">
+					{% endif %}
+	
+					{% if ledstate == "off" %}
+						<label>Off</label><input type="radio" value="off" name="led" checked>
+					{% else %}
+						<label>Off</label><input type="radio" value="off" name="led">
+					{% endif %}
+					
+					{% if ledstate == "flash" %}
+						<label>Flash</label><input type="radio" value="flash" name="led" checked>
+					{% else %}
+						<label>Flash</label><input type="radio" value="flash" name="led">
+					{% endif %}
+					
+					<input type="submit" value="Trimite">
+				</form>
+			</div>
+		
+		
+			<p id="distanta"><20cm</p>
 				<br>
 				<input id="slider" autocomplete="off" type="range" name="slider1" min="4" max="400" value="0">
-				<br>
-				<br>
-				<br>
-			</div>
-			<form action="/led" method="POST">
-				{% if ledstate == "on" %}
-					<label>On</label><input type="radio" value="on" name="led" checked>
-				{% else %}
-					<label>On</label><input type="radio" value="on" name="led">
-				{% endif %}
 
-				{% if ledstate == "off" %}
-					<label>Off</label><input type="radio" value="off" name="led" checked>
-				{% else %}
-					<label>Off</label><input type="radio" value="off" name="led">
-				{% endif %}
-				
-				{% if ledstate == "flash" %}
-					<label>Flash</label><input type="radio" value="flash" name="led" checked>
-				{% else %}
-					<label>Flash</label><input type="radio" value="flash" name="led">
-				{% endif %}
-				
-				<input type="submit" value="Trimite">
-			</form>
-		
 		</div>
 		<div id="mainJoystick">
 			<div id="wrapper">
 			</div>
 		  </div>
 
-		  <img src="{{ url_for('video_feed') }}">
+		  
 
 
 	</body>

@@ -46,10 +46,11 @@ input[type="range"] {
   #mainJoystick {
     align-items: center;
     display: block;
-    height: 100px;
+    height: 150px;
     justify-content: center;
-    margin: auto;
-    width: 100px;
+    margin:auto;
+    margin-top: 120px;
+    width: 150px;
   }
   
   #wrapper {
@@ -69,3 +70,6 @@ input[type="range"] {
     width: 150px;
   }
   
+  .videoFeed{
+    display:inline-block;
+  }
