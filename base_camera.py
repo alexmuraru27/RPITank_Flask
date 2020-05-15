@@ -1,5 +1,8 @@
 import time
 import threading
+
+#Camera library code  from miguelgrinberg ->https://github.com/miguelgrinberg/flask-video-streaming
+
 try:
     from greenlet import getcurrent as get_ident
 except ImportError:

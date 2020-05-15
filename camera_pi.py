@@ -3,7 +3,7 @@ import time
 import picamera
 from base_camera import BaseCamera
 
-
+#Camera library code imported from miguelgrinberg ->https://github.com/miguelgrinberg/flask-video-streaming
 class Camera(BaseCamera):
     @staticmethod
     def frames():
