@@ -12,6 +12,10 @@
 			<div class="center">
 				<div id="videoFeed">
 					<img src="{{ url_for('video_feed') }}" width="500" height="500" alt="camera">
+					<br>
+					<input id="slider" autocomplete="off" type="range" name="slider1" min="4" max="400" value="0">
+					<br>
+					<p id="distanta"><20cm</p></20cm>
 				</div>
 
 				<form action="/led" method="POST">
@@ -38,9 +42,9 @@
 			</div>
 		
 		
-			<p id="distanta"><20cm</p>
-				<br>
-				<input id="slider" autocomplete="off" type="range" name="slider1" min="4" max="400" value="0">
+			
+			
+			
 
 		</div>
 		<div id="mainJoystick">

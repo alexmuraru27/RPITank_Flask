@@ -1,6 +1,7 @@
 .container {
   height: 500px;
   position: relative;
+  margin-top:30px
 }
 
 .center {
@@ -8,6 +9,7 @@
   text-align: center;
   margin: 0;
   position: absolute;
+  margin-top:60px;
   top: 50%;
   left: 50%;
   -ms-transform: translate(-50%, -50%);
@@ -15,17 +17,23 @@
 }
 
 #slider{
-	transform: rotate(-90deg);
+  height: 20px;
+  width:500px;
 }
 input[type="range"] { 
     -webkit-appearance: none;
     position: relative;
     overflow: hidden;
-    height: 50px;
-    width: 200px;
+    height: 100px;
+    width: 400px;
     cursor: pointer;
 	border: 1px solid red;
     border-radius: 0; /* iOS */
+}
+#distanta{
+  font-family: Verdana;
+  font-size: 1.5em;
+  margin:0px;
 }
 
 ::-webkit-slider-runnable-track {
@@ -49,7 +57,7 @@ input[type="range"] {
     height: 150px;
     justify-content: center;
     margin:auto;
-    margin-top: 120px;
+    margin-top: 220px;
     width: 150px;
   }
   
