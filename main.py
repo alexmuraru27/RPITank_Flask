@@ -51,7 +51,7 @@ class Car:
 		GPIO.setup(self.ms1,GPIO.OUT)
 		GPIO.setup(self.ms2,GPIO.OUT)
 		self.currentDistance="0"
-		self.blinkDelay=0.2
+		self.blinkDelay=0.4
 		self.blink=False
 		self.ledState=0
 
@@ -88,7 +88,7 @@ class Car:
 	def distanceLoop(self):
 		while 1:
 			self.setDistance()
-			time.sleep(0.2)
+			time.sleep(1)
 
 
 	def getDistance(self):
@@ -190,12 +190,12 @@ class Car:
 
 app=Flask(__name__)
 if app.config["DEBUG"]:
-    @app.after_request
-    def after_request(response):
-        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
-        response.headers["Expires"] = 0
-        response.headers["Pragma"] = "no-cache"
-        return response
+	@app.after_request
+	def after_request(response):
+		response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
+		response.headers["Expires"] = 0
+		response.headers["Pragma"] = "no-cache"
+		return response
 masina=Car()
 
 
@@ -231,15 +231,17 @@ def moveTank():
 	return "ok"
 
 def gen(camera):
-    while True:
-        frame = camera.get_frame()
-        yield (b'--frame\r\n'
+	while True:
+		frame = camera.get_frame()
+		yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+		time.sleep(0.3)
+
 
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+	return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
 	try:

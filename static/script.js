@@ -1,7 +1,7 @@
 var joystick;
 function start()
 {
-	setInterval(readDistance, 200);
+	setInterval(readDistance, 100);
 	joystick = createJoystick(document.getElementById('wrapper'));
 	setInterval(() => sendPosition(),100);
 
