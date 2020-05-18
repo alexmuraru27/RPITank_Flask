@@ -70,8 +70,17 @@ class Car:
 		self.rightPWMVal=0
 		self.pwmrate=10
 
+		self.moveX=0
+		self.moveY=0
+		self.moveth=Thread(target=self.moveThread)
+		self.moveth.start()
+
+
+
 	def setDistance(self):
 		tmp=self.currentDistance
+		start_t=0
+		stop_t=0
 		GPIO.output(self.trig,GPIO.HIGH)
 		time.sleep(0.00001)
 		GPIO.output(self.trig,GPIO.LOW)
@@ -118,6 +127,15 @@ class Car:
 
 	def stopBlink(self):
 		self.blink=False
+
+	def setXY(self,x,y):
+		self.moveX=x
+		self.moveY=y
+
+	def moveThread(self):
+		while 1:
+			self.moveTankCoords(self.moveX,self.moveY)
+			time.sleep(0.1)
 
 	def moveTankCoords(self,x,y):
 		w=(1-abs(y))*(x)+x
@@ -227,7 +245,7 @@ def moveTank():
 	(x,y)=str(request.data)[2:-1].split(",")
 	y=-float(y)
 	x=float(x)
-	masina.moveTankCoords(x,y)
+	masina.setXY(x,y)
 	return "ok"
 
 def gen(camera):
@@ -235,7 +253,6 @@ def gen(camera):
 		frame = camera.get_frame()
 		yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-		time.sleep(0.3)
 
 
 

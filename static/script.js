@@ -1,10 +1,17 @@
 var joystick;
+var changed = false;
 function start()
 {
-	setInterval(readDistance, 100);
-	joystick = createJoystick(document.getElementById('wrapper'));
-	setInterval(() => sendPosition(),100);
+	setInterval(readDistance, 300);
+  joystick = createJoystick(document.getElementById('wrapper'));
+  setInterval(moveLoop, 200);
+}
 
+function moveLoop(){
+  if (changed){
+    sendPosition();
+    changed=false;
+  }
 }
 
 function sendPosition(){
@@ -61,11 +68,13 @@ function createJoystick(parent) {
       x: event.clientX,
       y: event.clientY,
     };
-
   }
-
   function handleMouseMove(event) {
-    if (dragStart === null) return;
+    if (dragStart === null) {
+      changed = false;
+      return;
+    }
+    changed = true;
     event.preventDefault();
     if (event.changedTouches) {
       event.clientX = event.changedTouches[0].clientX;
@@ -91,6 +100,8 @@ function createJoystick(parent) {
     stick.style.transform = `translate3d(0px, 0px, 0px)`;
     dragStart = null;
     currentPos = { x: 0, y: 0 };
+    sendPosition();
+    changed=false;
   }
 
   parent.appendChild(stick);
